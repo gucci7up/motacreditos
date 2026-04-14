@@ -46,44 +46,6 @@ CREATE TABLE IF NOT EXISTS pagos (
   FOREIGN KEY (venta_id) REFERENCES ventas(id) ON DELETE CASCADE
 );
 
--- Triggers for automatic debt calculation (saldo_total)
-DELIMITER //
-
-CREATE TRIGGER after_venta_insert
-AFTER INSERT ON ventas
-FOR EACH ROW
-BEGIN
-  UPDATE clientes 
-  SET saldo_total = saldo_total + NEW.monto_total
-  WHERE id = NEW.cliente_id;
-END; //
-
-CREATE TRIGGER after_pago_insert
-AFTER INSERT ON pagos
-FOR EACH ROW
-BEGIN
-  DECLARE cliente_id INT;
-  DECLARE monto_venta_restante DECIMAL(10,2);
-  
-  -- Calculate remaining debt for the sale (venta) to update status
-  SELECT v.cliente_id, (v.monto_total - IFNULL(SUM(p.monto_abonado), 0))
-  INTO cliente_id, monto_venta_restante
-  FROM ventas v
-  LEFT JOIN pagos p ON v.id = p.venta_id
-  WHERE v.id = NEW.venta_id
-  GROUP BY v.id;
-
-  -- Update client global debt
-  UPDATE clientes 
-  SET saldo_total = saldo_total - NEW.monto_abonado
-  WHERE id = cliente_id;
-  
-  -- Update sale status based on remaining debt
-  IF monto_venta_restante <= 0 THEN
-      UPDATE ventas SET estado = 'Pagado' WHERE id = NEW.venta_id;
-  ELSE
-      UPDATE ventas SET estado = 'Parcial' WHERE id = NEW.venta_id;
-  END IF;
-END; //
-
-DELIMITER ;
+-- Note: Triggers for automatic debt calculation (saldo_total) have been migrated 
+-- to the backend controllers (ventas.js and pagos.js) to avoid permission issues 
+-- on managed database environments.
