@@ -6,13 +6,19 @@ const db = require('../config/db');
 router.get('/', async (req, res) => {
     try {
         const query = `
-      SELECT v.*, c.nombre as cliente_nombre 
+      SELECT v.*, c.nombre as cliente_nombre,
+             IFNULL((SELECT SUM(monto_abonado) FROM pagos WHERE venta_id = v.id), 0) as total_pagado
       FROM ventas v 
       JOIN clientes c ON v.cliente_id = c.id 
       ORDER BY v.fecha DESC
     `;
         const [rows] = await db.query(query);
-        res.json(rows);
+        // Calcular saldo_pendiente en JS o SQL
+        const results = rows.map(r => ({
+            ...r,
+            saldo_pendiente: parseFloat(r.monto_total) - parseFloat(r.total_pagado)
+        }));
+        res.json(results);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al obtener ventas' });
