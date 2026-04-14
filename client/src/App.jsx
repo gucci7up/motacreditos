@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Users, DollarSign, LayoutDashboard, TrendingUp, UserPlus, Droplet, ArrowUpRight, LogOut, Menu, X, Bell } from 'lucide-react';
+import { ShoppingCart, Users, DollarSign, LayoutDashboard, TrendingUp, UserPlus, Droplet, ArrowUpRight, LogOut, Menu, X, Bell, Package } from 'lucide-react';
 import logo from './assets/logo.png';
 import Dashboard from './pages/Dashboard';
 import Clientes from './pages/Clientes';
