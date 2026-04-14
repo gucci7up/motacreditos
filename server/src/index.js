@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -23,8 +24,8 @@ app.use('/api/ventas', require('./routes/ventas'));
 app.use('/api/pagos', require('./routes/pagos'));
 
 // Servir archivos de imagen subidos
-const UPLOADS_PATH = path.resolve(__dirname, '../uploads'); // Move to server root
-const fs = require('fs');
+// En Docker WD es /app/server, así que esto crea /app/server/uploads
+const UPLOADS_PATH = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(UPLOADS_PATH)) {
     try {
         fs.mkdirSync(UPLOADS_PATH, { recursive: true });
@@ -92,4 +93,13 @@ app.listen(PORT, async () => {
     } catch (err) {
         console.error(`[DB ERROR] No se pudo conectar a la base de datos. Host: ${process.env.DB_HOST || 'localhost'}, Error: ${err.message}`);
     }
+});
+
+// Global error handler for uncaught exceptions
+process.on('uncaughtException', (err) => {
+    console.error('[CRITICAL] Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('[CRITICAL] Unhandled Rejection at:', promise, 'reason:', reason);
 });

@@ -5,10 +5,12 @@ const multer = require('multer');
 const path = require('path');
 
 // Configuración de Multer
-const UPLOADS_DIR = path.resolve(__dirname, '../../uploads/'); // Move to server root
+const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
 const fs = require('fs');
 if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    try {
+        fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    } catch (e) { console.error('Error creating uploads dir:', e); }
 }
 
 const storage = multer.diskStorage({
@@ -79,16 +81,20 @@ router.post('/', handleUpload, async (req, res) => {
         res.status(500).json({
             error: 'Error al crear producto',
             details: error.message,
-            sqlMessage: error.sqlMessage // Useful for production debugging temporarily
+            sqlMessage: error.sqlMessage
         });
     }
 });
 
 // Actualizar producto o stock con imagen opcional
-router.put('/:id', upload.single('imagen'), async (req, res) => {
+router.put('/:id', handleUpload, async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre_perfume, categoria, precio_venta, stock_actual, stock_minimo } = req.body;
+        const { nombre_perfume, categoria } = req.body;
+
+        const precio_venta = parseFloat(req.body.precio_venta) || 0;
+        const stock_actual = parseInt(req.body.stock_actual) || 0;
+        const stock_minimo = parseInt(req.body.stock_minimo) || 5;
 
         let final_image_url = req.body.imagen_url;
         if (req.file) {
@@ -102,7 +108,7 @@ router.put('/:id', upload.single('imagen'), async (req, res) => {
         res.json({ message: 'Producto actualizado con éxito', imagen_url: final_image_url });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error al actualizar producto' });
+        res.status(500).json({ error: 'Error al actualizar producto', details: error.message });
     }
 });
 
