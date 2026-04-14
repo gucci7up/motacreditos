@@ -38,12 +38,12 @@ export default function Dashboard() {
     return (
         <div className="space-y-6 md:space-y-8 max-w-5xl">
             {/* Hero Balance Card */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-700 rounded-[24px] md:rounded-[32px] p-6 md:p-8 shadow-xl shadow-indigo-100 group transition-all duration-500">
+            <div className="relative overflow-hidden bg-gradient-to-br from-rose-600 via-rose-500 to-red-600 rounded-[24px] md:rounded-[32px] p-6 md:p-8 shadow-xl shadow-rose-100 group transition-all duration-500">
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-[0.1] blur-[80px] rounded-full group-hover:opacity-[0.15] transition-opacity"></div>
 
                 <div className="flex justify-between items-start mb-10">
                     <div>
-                        <p className="text-indigo-100 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-1">Cuentas por Cobrar</p>
+                        <p className="text-rose-100 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-1">Cuentas por Cobrar</p>
                         <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
                             ${stats.totalPorCobrar.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                         </h2>
@@ -52,11 +52,11 @@ export default function Dashboard() {
 
                 <div className="grid grid-cols-2 gap-3 md:gap-4">
                     <div className="bg-white/10 p-4 md:p-5 rounded-xl md:rounded-2xl border border-white/10 backdrop-blur-sm">
-                        <p className="text-indigo-100/70 text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Total Clientes</p>
+                        <p className="text-rose-100/70 text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Total Clientes</p>
                         <p className="text-lg md:text-xl font-bold text-white">{stats.totalClientes}</p>
                     </div>
                     <div className="bg-white/10 p-4 md:p-5 rounded-xl md:rounded-2xl border border-white/10 backdrop-blur-sm">
-                        <p className="text-indigo-100/70 text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Crecimiento</p>
+                        <p className="text-rose-100/70 text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Crecimiento</p>
                         <p className="text-lg md:text-xl font-bold text-white flex items-center">
                             +12% <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4 ml-1 opacity-80" />
                         </p>

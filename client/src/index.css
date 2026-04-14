@@ -7,12 +7,14 @@
         --bg-main: #f8fafc;
         --bg-card: #ffffff;
         --bg-card-hover: #f1f5f9;
-        --accent-primary: #6366f1;
-        --accent-secondary: #8b5cf6;
-        --text-primary: #0f172a;
-        --text-secondary: #64748b;
+        --accent-primary: #dc2626;
+        --primary-hover: #b91c1c;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --accent: #111827;
+        --sidebar-w: 280px;
         --glass-bg: rgba(255, 255, 255, 0.8);
-        --glass-border: rgba(99, 102, 241, 0.1);
+        --glass-border: rgba(220, 38, 38, 0.1);
     }
 
     body {

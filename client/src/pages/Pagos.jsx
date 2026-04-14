@@ -38,15 +38,15 @@ export default function Pagos() {
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white w-12 h-12 md:w-auto md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold shadow-lg shadow-indigo-200 flex items-center justify-center space-x-2 transition-all active:scale-95"
+                    className="bg-rose-600 hover:bg-rose-700 text-white w-12 h-12 md:w-auto md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold shadow-lg shadow-rose-200 flex items-center justify-center space-x-2 transition-all active:scale-95"
                 >
                     <DollarSign className="w-5 h-5" /> <span className="hidden md:inline">Registrar Abono</span>
                 </button>
             </div>
 
             <div className="bg-white p-10 md:p-16 rounded-[24px] md:rounded-[40px] border border-slate-100 flex flex-col items-center text-center space-y-4 shadow-sm">
-                <div className="w-20 h-20 md:w-24 md:h-24 bg-indigo-50 rounded-[32px] flex items-center justify-center border border-indigo-100 mb-2">
-                    <DollarSign className="w-10 h-10 md:w-12 md:h-12 text-indigo-600" />
+                <div className="w-20 h-20 md:w-24 md:h-24 bg-rose-50 rounded-[32px] flex items-center justify-center border border-rose-100 mb-2">
+                    <DollarSign className="w-10 h-10 md:w-12 md:h-12 text-rose-600" />
                 </div>
                 <h3 className="text-lg md:text-xl font-black text-slate-900">Centro de Recaudación</h3>
                 <p className="text-xs md:text-sm text-slate-500 max-w-xs font-medium leading-relaxed">

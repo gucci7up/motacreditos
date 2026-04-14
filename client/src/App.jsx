@@ -40,34 +40,38 @@ function Sidebar({ activePath }) {
 
     return (
         <div className="hidden md:flex w-64 bg-white text-slate-600 flex-col h-screen border-r border-slate-200 shadow-xl z-20">
-            <div className="p-8 flex items-center space-x-3 border-b border-slate-100">
-                <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-200">
-                    <Droplet className="w-6 h-6 text-white" strokeWidth={3} />
+            <div className="p-8">
+                <div className="flex items-center space-x-3 mb-10 group cursor-default">
+                    <div className="w-12 h-12 bg-rose-600 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200 group-hover:scale-105 transition-transform">
+                        <span className="text-white font-black text-2xl">M</span>
+                    </div>
+                    <div>
+                        <h1 className="text-xl font-black text-slate-900 tracking-tighter">Mota<span className="text-rose-600">Parfum</span></h1>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Fine Fragrances</p>
+                    </div>
                 </div>
-                <span className="text-xl font-black tracking-tighter uppercase italic text-slate-900">MotaCréditos</span>
+
+                <nav className="space-y-2">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`flex items-center space-x-4 px-5 py-4 rounded-2xl font-bold transition-all ${activePath === item.path
+                                ? "bg-rose-50 text-rose-600 shadow-sm border border-rose-100"
+                                : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                                }`}
+                        >
+                            <item.icon className="w-5 h-5" />
+                            <span>{item.label}</span>
+                        </Link>
+                    ))}
+                </nav>
             </div>
 
-            <nav className="flex-1 px-4 py-8 space-y-2">
-                {navItems.map((item) => (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center space-x-4 w-full p-4 rounded-2xl transition-all duration-300 group ${activePath === item.path
-                            ? "bg-indigo-50 text-indigo-600 font-bold shadow-sm"
-                            : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
-                            }`}
-                    >
-                        <item.icon className={`w-5 h-5 transition-transform duration-300 group-hover:scale-110 ${activePath === item.path ? "text-indigo-600" : "text-slate-400 group-hover:text-indigo-500"
-                            }`} />
-                        <span className="text-sm font-semibold tracking-wide">{item.label}</span>
-                    </Link>
-                ))}
-            </nav>
-
-            <div className="p-6">
+            <div className="p-6 mt-auto">
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
                     <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold mb-1">Versión 2.1</p>
-                    <p className="text-[10px] text-slate-500 font-medium">MotaCréditos © 2026</p>
+                    <p className="text-[10px] text-slate-500 font-medium">MotaParfum © 2026</p>
                 </div>
             </div>
         </div>

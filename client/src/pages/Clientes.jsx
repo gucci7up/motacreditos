@@ -38,7 +38,7 @@ export default function Clientes() {
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white w-12 h-12 md:w-auto md:px-6 md:py-3 rounded-xl md:rounded-2xl font-black shadow-lg shadow-indigo-100 flex items-center justify-center space-x-2 transition-all active:scale-95"
+                    className="bg-rose-600 hover:bg-rose-700 text-white w-12 h-12 md:w-auto md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold shadow-lg shadow-rose-200 flex items-center justify-center space-x-2 transition-all active:scale-95"
                 >
                     <UserPlus className="w-5 h-5" /> <span className="hidden md:inline">Nuevo Cliente</span>
                 </button>

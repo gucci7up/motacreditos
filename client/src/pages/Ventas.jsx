@@ -44,7 +44,7 @@ export default function Ventas() {
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white w-12 h-12 md:w-auto md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold shadow-lg shadow-indigo-200 flex items-center justify-center space-x-2 transition-all active:scale-95"
+                    className="bg-rose-600 hover:bg-rose-700 text-white w-12 h-12 md:w-auto md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold shadow-lg shadow-rose-200 flex items-center justify-center space-x-2 transition-all active:scale-95"
                 >
                     <ShoppingCart className="w-5 h-5" /> <span className="hidden md:inline">Nueva Venta</span>
                 </button>
