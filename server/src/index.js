@@ -23,7 +23,12 @@ app.use('/api/ventas', require('./routes/ventas'));
 app.use('/api/pagos', require('./routes/pagos'));
 
 // Servir archivos de imagen subidos
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const UPLOADS_PATH = path.resolve(__dirname, 'uploads');
+const fs = require('fs');
+if (!fs.existsSync(UPLOADS_PATH)) {
+    fs.mkdirSync(UPLOADS_PATH, { recursive: true });
+}
+app.use('/uploads', express.static(UPLOADS_PATH));
 
 // Servir frontend estático para producción (dist de vite)
 const clientBuildPath = path.resolve(__dirname, '../../client/dist');
