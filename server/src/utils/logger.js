@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const LOG_FILE = path.join(process.cwd(), 'error.log');
+const VERSION = '2.1.0-RESILIENT-INIT';
 
 const logger = {
     log: (message, type = 'INFO') => {

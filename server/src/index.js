@@ -72,7 +72,7 @@ app.get('*', (req, res) => {
 
 // Inicio del servidor
 app.listen(PORT, async () => {
-    logger.log(`Servidor iniciado en puerto ${PORT}`);
+    logger.log(`Servidor iniciado en puerto ${PORT} | VERSION: 2.1.0-RESILIENT-INIT`);
 
     // Test and Init DB
     const db = require('./config/db');
