@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const logger = require('./utils/logger');
+logger.log(`VERSION: 2.1.1-AUTO-MIGRATE`);
 require('dotenv').config();
 
 const app = express();
@@ -26,8 +27,20 @@ app.get('/api/debug/logs', (req, res) => {
 app.get('/api/debug/test-db', async (req, res) => {
     const db = require('./config/db');
     try {
-        const [rows] = await db.query('SHOW TABLES');
-        res.json({ status: 'ok', tables: rows, env: process.env.NODE_ENV });
+        const [tables] = await db.query('SHOW TABLES');
+        const schemaInfo = {};
+
+        for (const row of tables) {
+            const tableName = Object.values(row)[0];
+            const [columns] = await db.query(`SHOW COLUMNS FROM ${tableName}`);
+            schemaInfo[tableName] = columns.map(c => c.Field);
+        }
+
+        res.json({
+            status: 'ok',
+            schema: schemaInfo,
+            env: process.env.NODE_ENV
+        });
     } catch (err) {
         logger.error('Debug DB Test failed', err);
         res.status(500).json({ status: 'error', details: err.message });
@@ -106,6 +119,18 @@ app.listen(PORT, async () => {
                 }
             }
             logger.log('[DB] Inicialización de esquema finalizada.');
+
+            // Migrations / Schema patching (Fix for existing tables missing new columns)
+            try {
+                const [columns] = await db.query('SHOW COLUMNS FROM productos');
+                const hasCategoria = columns.some(c => c.Field === 'categoria');
+                if (!hasCategoria) {
+                    await db.query('ALTER TABLE productos ADD COLUMN categoria VARCHAR(100) AFTER nombre_perfume');
+                    logger.log('[DB MIGRATION] Columna "categoria" añadida a la tabla productos.');
+                }
+            } catch (migErr) {
+                logger.error('[DB MIGRATION ERROR] No se pudo verificar/añadir la columna categoria', migErr);
+            }
         }
     } catch (err) {
         logger.error(`[DB ERROR] No se pudo conectar a la base de datos`, err);
