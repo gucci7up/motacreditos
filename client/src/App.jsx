@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Home, Users, ShoppingBag, CreditCard, Droplet } from 'lucide-react';
+import { ShoppingCart, Users, DollarSign, LayoutDashboard, TrendingUp, UserPlus, Droplet, ArrowUpRight, LogOut, Menu, X, Bell } from 'lucide-react';
+import logo from './assets/logo.png';
 import Dashboard from './pages/Dashboard';
 import Clientes from './pages/Clientes';
 import Ventas from './pages/Ventas';
@@ -42,11 +43,11 @@ function Sidebar({ activePath }) {
         <div className="hidden md:flex w-64 bg-white text-slate-600 flex-col h-screen border-r border-slate-200 shadow-xl z-20">
             <div className="p-8">
                 <div className="flex items-center space-x-3 mb-10 group cursor-default">
-                    <div className="w-12 h-12 bg-rose-600 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200 group-hover:scale-105 transition-transform">
-                        <span className="text-white font-black text-2xl">M</span>
+                    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center p-2 shadow-sm border border-slate-100 group-hover:scale-105 transition-transform duration-300">
+                        <img src={logo} alt="MotaParfum Logo" className="w-full h-full object-contain" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black text-slate-900 tracking-tighter">Mota<span className="text-rose-600">Parfum</span></h1>
+                        <h1 className="text-xl font-black text-slate-900 tracking-tighter leading-tight">Mota<span className="text-rose-600">Parfum</span></h1>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Fine Fragrances</p>
                     </div>
                 </div>
@@ -121,25 +122,25 @@ function AppLayout() {
     const location = useLocation();
 
     return (
-        <div className="flex bg-[#f8fafc] min-h-screen text-slate-900 selection:bg-indigo-100 relative pb-24 md:pb-0">
+        <div className="flex bg-[#f8fafc] min-h-screen text-slate-900 selection:bg-rose-100 relative pb-24 md:pb-0">
             <Sidebar activePath={location.pathname} />
             <main className="flex-1 flex flex-col h-screen overflow-hidden">
                 <header className="px-6 md:px-10 py-6 md:py-8 flex justify-between items-center z-10 shrink-0">
                     <div className="flex items-center space-x-3 md:block">
-                        <div className="md:hidden bg-indigo-600 p-2 rounded-xl shadow-md">
-                            <Droplet className="w-5 h-5 text-white" strokeWidth={3} />
+                        <div className="md:hidden w-10 h-10 bg-white rounded-xl shadow-sm border border-slate-100 p-1.5">
+                            <img src={logo} alt="Logo" className="w-full h-full object-contain" />
                         </div>
                         <div>
-                            <p className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-[0.3em] mb-0.5 md:mb-1">MotaCréditos</p>
+                            <p className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-[0.3em] mb-0.5 md:mb-1">MotaParfum</p>
                             <h1 className="text-xl md:text-3xl font-black text-slate-900 tracking-tight">Panel de Gestión</h1>
                         </div>
                     </div>
                     <div className="flex items-center space-x-3 md:space-x-4">
                         <button className="p-2.5 md:p-3 bg-white rounded-2xl border border-slate-200 hover:bg-slate-50 shadow-sm transition-all relative">
-                            <div className="absolute top-2.5 right-2.5 md:top-3 md:right-3 w-1.5 h-1.5 md:w-2 md:h-2 bg-indigo-500 rounded-full shadow-sm"></div>
-                            <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 text-slate-600" />
+                            <div className="absolute top-2.5 right-2.5 md:top-3 md:right-3 w-1.5 h-1.5 md:w-2 md:h-2 bg-rose-500 rounded-full shadow-sm"></div>
+                            <Bell className="w-4 h-4 md:w-5 md:h-5 text-slate-600" />
                         </button>
-                        <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-indigo-600 to-indigo-400 rounded-2xl border-2 border-white shadow-lg shadow-indigo-100"></div>
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-rose-600 to-rose-400 rounded-2xl border-2 border-white shadow-lg shadow-rose-100"></div>
                     </div>
                 </header>
                 <div className="flex-1 overflow-auto px-6 md:px-10 pb-10">
