@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../config/db');
 const multer = require('multer');
 const path = require('path');
+const logger = require('../utils/logger');
 
 // Configuración de Multer
 const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
@@ -10,7 +11,7 @@ const fs = require('fs');
 if (!fs.existsSync(UPLOADS_DIR)) {
     try {
         fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-    } catch (e) { console.error('Error creating uploads dir:', e); }
+    } catch (e) { logger.error('Error creating uploads dir', e); }
 }
 
 const storage = multer.diskStorage({
@@ -32,8 +33,10 @@ const upload = multer({
 const handleUpload = (req, res, next) => {
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
+            logger.error('Multer error', err);
             return res.status(400).json({ error: 'Error de subida de archivo', details: err.message });
         } else if (err) {
+            logger.error('Unknown upload error', err);
             return res.status(500).json({ error: 'Error interno en subida', details: err.message });
         }
         next();
@@ -46,7 +49,7 @@ router.get('/', async (req, res) => {
         const [rows] = await db.query('SELECT * FROM productos ORDER BY nombre_perfume ASC');
         res.json(rows);
     } catch (error) {
-        console.error(error);
+        logger.error('Error fetching productos', error);
         res.status(500).json({ error: 'Error al obtener productos', details: error.message });
     }
 });
@@ -77,7 +80,7 @@ router.post('/', handleUpload, async (req, res) => {
         );
         res.status(201).json({ id: result.insertId, nombre_perfume, categoria, imagen_url: final_image_url });
     } catch (error) {
-        console.error('Error al crear producto:', error);
+        logger.error('Error al crear producto', error);
         res.status(500).json({
             error: 'Error al crear producto',
             details: error.message,
@@ -107,7 +110,7 @@ router.put('/:id', handleUpload, async (req, res) => {
         );
         res.json({ message: 'Producto actualizado con éxito', imagen_url: final_image_url });
     } catch (error) {
-        console.error(error);
+        logger.error(`Error updating product ID: ${id}`, error);
         res.status(500).json({ error: 'Error al actualizar producto', details: error.message });
     }
 });
