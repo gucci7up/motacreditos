@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-motacreditos_root_pass}
+      MYSQL_DATABASE: ${DB_NAME:-motacreditos}
+      MYSQL_USER: ${DB_USER:-motacreditos_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-motacreditos_pass}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Initialize schema on first startup
+      - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql:ro
+    ports:
+      - "3306:3306"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=db
+      - DB_USER=${DB_USER:-motacreditos_user}
+      - DB_PASSWORD=${DB_PASSWORD:-motacreditos_pass}
+      - DB_NAME=${DB_NAME:-motacreditos}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
