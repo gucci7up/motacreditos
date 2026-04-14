@@ -48,4 +48,9 @@ app.get('*', (req, res) => {
 // Inicio del servidor
 app.listen(PORT, () => {
     console.log(`Servidor iniciado en puerto ${PORT}`);
+    // Test DB connection on startup
+    const db = require('./config/db');
+    db.query('SELECT 1')
+        .then(() => console.log(`[DB] Conexión exitosa a ${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 3306}`))
+        .catch(err => console.error(`[DB ERROR] No se pudo conectar a la base de datos. Host: ${process.env.DB_HOST || 'localhost'}, Error: ${err.message}`));
 });
