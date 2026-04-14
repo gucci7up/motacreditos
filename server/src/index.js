@@ -52,6 +52,7 @@ app.use('/api/clientes', require('./routes/clientes'));
 app.use('/api/productos', require('./routes/productos'));
 app.use('/api/ventas', require('./routes/ventas'));
 app.use('/api/pagos', require('./routes/pagos'));
+app.use('/api/reportes', require('./routes/reportes'));
 
 // Servir archivos de imagen subidos
 // En Docker WD es /app/server, así que esto crea /app/server/uploads

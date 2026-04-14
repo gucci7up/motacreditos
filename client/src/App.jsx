@@ -7,6 +7,7 @@ import Clientes from './pages/Clientes';
 import Ventas from './pages/Ventas';
 import Pagos from './pages/Pagos';
 import Inventario from './pages/Inventario';
+import Reportes from './pages/Reportes';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -39,6 +40,7 @@ function Sidebar({ activePath }) {
         { path: '/inventario', label: 'Inventario', icon: Package },
         { path: '/ventas', label: 'Ventas', icon: ShoppingCart },
         { path: '/pagos', label: 'Abonos', icon: DollarSign },
+        { path: '/reportes', label: 'Reportes', icon: TrendingUp },
     ];
 
     return (
@@ -88,6 +90,7 @@ function BottomNav({ activePath }) {
         { path: '/inventario', label: 'Inventario', icon: Package },
         { path: '/ventas', label: 'Ventas', icon: ShoppingCart },
         { path: '/pagos', label: 'Abonos', icon: DollarSign },
+        { path: '/reportes', label: 'Reportes', icon: TrendingUp },
     ];
 
     return (
@@ -154,6 +157,7 @@ function AppLayout() {
                             <Route path="/inventario" element={<Inventario />} />
                             <Route path="/ventas" element={<Ventas />} />
                             <Route path="/pagos" element={<Pagos />} />
+                            <Route path="/reportes" element={<Reportes />} />
                         </Routes>
                     </ErrorBoundary>
                 </div>
