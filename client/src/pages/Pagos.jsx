@@ -65,14 +65,14 @@ export default function Pagos() {
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-slate-900/40 z-[60] flex justify-center items-center p-4 backdrop-blur-sm">
-                    <div className="bg-white rounded-[32px] p-8 w-full max-w-md border border-slate-100 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                    <div className="bg-white rounded-[32px] p-8 w-full max-w-md border border-slate-200 shadow-2xl relative animate-in fade-in zoom-in duration-300">
                         <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
                             <DollarSign className="w-6 h-6 mr-2 text-indigo-600" /> Nuevo Abono
                         </h3>
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div>
                                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Venta / Ticket Pendiente</label>
-                                <select required value={formData.venta_id} onChange={e => setFormData({ ...formData, venta_id: e.target.value })} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all font-medium">
+                                <select required value={formData.venta_id} onChange={e => setFormData({ ...formData, venta_id: e.target.value })} className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-slate-700 appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all font-medium">
                                     <option value="" className="bg-white">Seleccione el ticket...</option>
                                     {ventasPendientes.map(v => (
                                         <option key={v.id} value={v.id} className="bg-white">
@@ -83,11 +83,11 @@ export default function Pagos() {
                             </div>
                             <div>
                                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Monto a Abonar ($)</label>
-                                <input required type="number" step="0.01" min="0.01" value={formData.monto_abonado} onChange={e => setFormData({ ...formData, monto_abonado: e.target.value })} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all font-medium" placeholder="0.00" />
+                                <input required type="number" step="0.01" min="0.01" value={formData.monto_abonado} onChange={e => setFormData({ ...formData, monto_abonado: e.target.value })} className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all font-medium" placeholder="0.00" />
                             </div>
                             <div>
                                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Método de Cobro</label>
-                                <select value={formData.metodo_pago} onChange={e => setFormData({ ...formData, metodo_pago: e.target.value })} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all font-medium">
+                                <select value={formData.metodo_pago} onChange={e => setFormData({ ...formData, metodo_pago: e.target.value })} className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-slate-700 appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all font-medium">
                                     <option value="Efectivo" className="bg-white">Efectivo</option>
                                     <option value="Transferencia" className="bg-white">Transferencia</option>
                                     <option value="Tarjeta" className="bg-white">Tarjeta</option>

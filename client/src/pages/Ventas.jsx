@@ -101,8 +101,8 @@ export default function Ventas() {
                                 <td className="py-6 px-8 font-black text-slate-900">${parseFloat(v.monto_total).toLocaleString()}</td>
                                 <td className="py-6 px-8 text-center">
                                     <span className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest border ${v.estado === 'Pagado' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                                            v.estado === 'Parcial' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                                                'bg-rose-50 text-rose-600 border-rose-100'
+                                        v.estado === 'Parcial' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                            'bg-rose-50 text-rose-600 border-rose-100'
                                         }`}>
                                         {v.estado}
                                     </span>
@@ -127,8 +127,8 @@ export default function Ventas() {
                                 <div className="flex items-center space-x-2">
                                     <span className="text-rose-600 font-black">#{v.id}</span>
                                     <span className={`px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-wider ${v.estado === 'Pagado' ? 'bg-emerald-100 text-emerald-700' :
-                                            v.estado === 'Parcial' ? 'bg-amber-100 text-amber-700' :
-                                                'bg-rose-100 text-rose-700'
+                                        v.estado === 'Parcial' ? 'bg-amber-100 text-amber-700' :
+                                            'bg-rose-100 text-rose-700'
                                         }`}>
                                         {v.estado}
                                     </span>
@@ -149,7 +149,7 @@ export default function Ventas() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setIsModalOpen(false)}></div>
-                    <div className="relative bg-white w-full max-w-lg rounded-[40px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                    <div className="relative bg-white w-full max-w-lg rounded-[40px] shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in duration-300">
                         <div className="bg-rose-600 p-8 text-white relative">
                             <ShoppingCart className="absolute top-8 right-8 w-12 h-12 text-white/20" />
                             <h3 className="text-2xl font-black">Registrar Venta</h3>
@@ -163,7 +163,7 @@ export default function Ventas() {
                                     <select required
                                         value={formData.cliente_id}
                                         onChange={e => setFormData({ ...formData, cliente_id: e.target.value })}
-                                        className="w-full pl-12 pr-5 py-4 bg-slate-50 border-none rounded-2xl text-slate-700 font-bold focus:ring-4 focus:ring-rose-500/10 appearance-none transition-all"
+                                        className="w-full pl-12 pr-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-700 font-bold focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 appearance-none transition-all"
                                     >
                                         <option value="">Seleccione un cliente...</option>
                                         {clientes.map(c => <option key={c.id} value={c.id}>{c.nombre} (Debiendo: ${c.saldo_total})</option>)}
@@ -178,7 +178,7 @@ export default function Ventas() {
                                     <select required
                                         value={formData.producto_id}
                                         onChange={e => setFormData({ ...formData, producto_id: e.target.value })}
-                                        className="w-full pl-12 pr-5 py-4 bg-slate-50 border-none rounded-2xl text-slate-700 font-bold focus:ring-4 focus:ring-rose-500/10 appearance-none transition-all"
+                                        className="w-full pl-12 pr-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-700 font-bold focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 appearance-none transition-all"
                                     >
                                         <option value="">Seleccione el perfume...</option>
                                         {productos.map(p => (
@@ -196,7 +196,7 @@ export default function Ventas() {
                                     <div className="relative">
                                         <Hash className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                         <input required type="number" min="1"
-                                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-bold focus:ring-4 focus:ring-rose-500/10 transition-all"
+                                            className="w-full pl-12 pr-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-900 font-bold focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all"
                                             value={formData.cantidad}
                                             onChange={e => setFormData({ ...formData, cantidad: parseInt(e.target.value) })}
                                         />

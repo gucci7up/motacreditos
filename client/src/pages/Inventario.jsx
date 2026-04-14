@@ -203,7 +203,7 @@ const Inventario = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setIsModalOpen(false)}></div>
-                    <div className="relative bg-white w-full max-w-lg rounded-[40px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                    <div className="relative bg-white w-full max-w-lg rounded-[40px] shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in duration-300">
                         <div className="bg-rose-600 p-8 text-white relative">
                             <h3 className="text-2xl font-black">{editingProduct ? 'Editar Producto' : 'Nuevo Producto'}</h3>
                             <p className="text-rose-100 font-medium opacity-80 text-sm">Completa los detalles del perfume</p>
@@ -212,7 +212,7 @@ const Inventario = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="col-span-2 space-y-2">
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Imagen del Producto</label>
-                                    <div className="flex flex-col items-center justify-center p-6 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl hover:bg-slate-100 transition-all group relative cursor-pointer overflow-hidden">
+                                    <div className="flex flex-col items-center justify-center p-6 bg-slate-50 border-2 border-dashed border-slate-300 rounded-3xl hover:bg-slate-100 transition-all group relative cursor-pointer overflow-hidden">
                                         {previewUrl ? (
                                             <div className="w-full h-40 relative group">
                                                 <img src={previewUrl} alt="Preview" className="w-full h-full object-contain" />
@@ -238,7 +238,7 @@ const Inventario = () => {
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Nombre del Perfume</label>
                                     <input
                                         type="text" required
-                                        className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-rose-500/10 transition-all font-bold"
+                                        className="w-full px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all font-bold"
                                         value={formData.nombre_perfume}
                                         onChange={e => setFormData({ ...formData, nombre_perfume: e.target.value })}
                                     />
@@ -247,7 +247,7 @@ const Inventario = () => {
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Categoría</label>
                                     <input
                                         type="text"
-                                        className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-rose-500/10 transition-all font-bold"
+                                        className="w-full px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all font-bold"
                                         placeholder="Ej: Damas, Caballeros"
                                         value={formData.categoria}
                                         onChange={e => setFormData({ ...formData, categoria: e.target.value })}
@@ -257,7 +257,7 @@ const Inventario = () => {
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Precio Venta</label>
                                     <input
                                         type="number" required step="0.01"
-                                        className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-rose-500/10 transition-all font-bold"
+                                        className="w-full px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all font-bold"
                                         value={formData.precio_venta}
                                         onChange={e => setFormData({ ...formData, precio_venta: e.target.value })}
                                     />
@@ -266,7 +266,7 @@ const Inventario = () => {
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Stock Actual</label>
                                     <input
                                         type="number" required
-                                        className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-rose-500/10 transition-all font-bold"
+                                        className="w-full px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all font-bold"
                                         value={formData.stock_actual}
                                         onChange={e => setFormData({ ...formData, stock_actual: e.target.value })}
                                     />
@@ -275,7 +275,7 @@ const Inventario = () => {
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Stock Mínimo</label>
                                     <input
                                         type="number" required
-                                        className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-rose-500/10 transition-all font-bold"
+                                        className="w-full px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all font-bold"
                                         value={formData.stock_minimo}
                                         onChange={e => setFormData({ ...formData, stock_minimo: e.target.value })}
                                     />
