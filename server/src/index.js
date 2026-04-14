@@ -58,25 +58,29 @@ app.listen(PORT, async () => {
         // Auto-initialize tables if they don't exist
         const schemaPath = path.resolve(__dirname, '../../schema.sql');
         if (fs.existsSync(schemaPath)) {
-            const schema = fs.readFileSync(schemaPath, 'utf8');
-            // Split schema by semicolon but handle the DELIMITER carefully
-            // For a simple implementation, we'll try to execute the tables first
-            const statements = schema
-                .split(';')
-                .map(s => s.trim())
-                .filter(s => s.length > 0 && !s.startsWith('--') && !s.startsWith('DELIMITER'));
+            let schema = fs.readFileSync(schemaPath, 'utf8');
 
-            for (let statement of statements) {
+            // Clean up schema for multipleStatements:
+            // 1. Remove DELIMITER lines
+            // 2. Replace the custom delimiter // with ;
+            const cleanSchema = schema
+                .replace(/^DELIMITER.*$/gm, '')
+                .replace(/\/\//g, ';')
+                .trim();
+
+            if (cleanSchema) {
                 try {
-                    await db.query(statement);
+                    await db.query(cleanSchema);
+                    console.log('[DB] Inicialización de tablas y triggers completada con éxito.');
                 } catch (err) {
-                    // Ignore errors if table already exists or if it's a complex trigger part we can't parse easily here
-                    if (!err.message.includes('already exists') && !err.message.includes('trigger already exists')) {
-                        console.warn(`[DB INIT WARNING] Error en statement: ${statement.substring(0, 50)}... -> ${err.message}`);
+                    // Si ya existen, MySQL dará error, pero intentamos procesar
+                    if (err.message.includes('already exists') || err.message.includes('Table already exists')) {
+                        console.log('[DB] Las tablas ya existen, saltando inicialización.');
+                    } else {
+                        console.error(`[DB INIT ERROR] Error al ejecutar el esquema: ${err.message}`);
                     }
                 }
             }
-            console.log('[DB] Inicialización de tablas completada.');
         }
     } catch (err) {
         console.error(`[DB ERROR] No se pudo conectar a la base de datos. Host: ${process.env.DB_HOST || 'localhost'}, Error: ${err.message}`);
