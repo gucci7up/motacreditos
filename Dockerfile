@@ -14,6 +14,7 @@ RUN npm install --production
 
 # Copy backend source
 COPY server/src ./src
+COPY schema.sql ../schema.sql
 
 # Copy built frontend from Stage 1 into client/dist (as expected by server/src/index.js)
 COPY --from=client-builder /app/client/dist /app/client/dist
