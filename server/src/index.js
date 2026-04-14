@@ -22,6 +22,9 @@ app.use('/api/productos', require('./routes/productos'));
 app.use('/api/ventas', require('./routes/ventas'));
 app.use('/api/pagos', require('./routes/pagos'));
 
+// Servir archivos de imagen subidos
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Servir frontend estático para producción (dist de vite)
 const clientBuildPath = path.resolve(__dirname, '../../client/dist');
 console.log('Serving static files from:', clientBuildPath);
