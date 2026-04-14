@@ -46,11 +46,39 @@ app.get('*', (req, res) => {
 });
 
 // Inicio del servidor
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Servidor iniciado en puerto ${PORT}`);
-    // Test DB connection on startup
+
+    // Test and Init DB
     const db = require('./config/db');
-    db.query('SELECT 1')
-        .then(() => console.log(`[DB] Conexión exitosa a ${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 3306}`))
-        .catch(err => console.error(`[DB ERROR] No se pudo conectar a la base de datos. Host: ${process.env.DB_HOST || 'localhost'}, Error: ${err.message}`));
+    try {
+        await db.query('SELECT 1');
+        console.log(`[DB] Conexión exitosa a ${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 3306}`);
+
+        // Auto-initialize tables if they don't exist
+        const schemaPath = path.resolve(__dirname, '../../schema.sql');
+        if (fs.existsSync(schemaPath)) {
+            const schema = fs.readFileSync(schemaPath, 'utf8');
+            // Split schema by semicolon but handle the DELIMITER carefully
+            // For a simple implementation, we'll try to execute the tables first
+            const statements = schema
+                .split(';')
+                .map(s => s.trim())
+                .filter(s => s.length > 0 && !s.startsWith('--') && !s.startsWith('DELIMITER'));
+
+            for (let statement of statements) {
+                try {
+                    await db.query(statement);
+                } catch (err) {
+                    // Ignore errors if table already exists or if it's a complex trigger part we can't parse easily here
+                    if (!err.message.includes('already exists') && !err.message.includes('trigger already exists')) {
+                        console.warn(`[DB INIT WARNING] Error en statement: ${statement.substring(0, 50)}... -> ${err.message}`);
+                    }
+                }
+            }
+            console.log('[DB] Inicialización de tablas completada.');
+        }
+    } catch (err) {
+        console.error(`[DB ERROR] No se pudo conectar a la base de datos. Host: ${process.env.DB_HOST || 'localhost'}, Error: ${err.message}`);
+    }
 });
