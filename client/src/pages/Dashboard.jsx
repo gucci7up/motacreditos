@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api/axios';
-import { Users, TrendingUp, DollarSign } from 'lucide-react';
+import { Users, TrendingUp, DollarSign, Plus, ArrowUpRight, ArrowDownLeft, FileText, ChevronRight } from 'lucide-react';
 
 export default function Dashboard() {
     const [stats, setStats] = useState({ totalClientes: 0, totalPorCobrar: 0, ventasRecientes: [] });
@@ -27,68 +28,90 @@ export default function Dashboard() {
         fetchStats();
     }, []);
 
+    const actions = [
+        { label: 'Venta', icon: Plus, color: 'bg-[#c5ff41] text-[#060912]', link: '/ventas' },
+        { label: 'Pago', icon: DollarSign, color: 'bg-indigo-500 text-white', link: '/pagos' },
+        { label: 'Cliente', icon: Users, color: 'bg-purple-500 text-white', link: '/clientes' },
+        { label: 'Reporte', icon: FileText, color: 'bg-slate-700 text-white', link: '/' },
+    ];
+
     return (
-        <div className="space-y-6 max-w-7xl mx-auto">
-            {/* Stat Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-2xl p-6 flex items-center space-x-4 shadow-sm border border-gray-100 transition-transform hover:-translate-y-1">
-                    <div className="bg-blue-100 p-4 rounded-full text-blue-600">
-                        <Users className="w-8 h-8" />
-                    </div>
+        <div className="space-y-8 max-w-5xl">
+            {/* Hero Balance Card */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#1e2541] to-[#151a2d] rounded-[32px] p-8 border border-white/5 shadow-2xl group transition-all duration-500 hover:shadow-[#c5ff41]/5">
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#c5ff41] opacity-[0.03] blur-[80px] rounded-full group-hover:opacity-[0.05] transition-opacity"></div>
+
+                <div className="flex justify-between items-start mb-6">
                     <div>
-                        <p className="text-gray-500 text-sm font-medium uppercase tracking-wider">Total Clientes</p>
-                        <p className="text-3xl font-bold text-gray-800">{stats.totalClientes}</p>
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-1">Cuentas por Cobrar</p>
+                        <h2 className="text-5xl font-black text-[#c5ff41] tracking-tighter neon-text">
+                            ${stats.totalPorCobrar.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                        </h2>
+                    </div>
+                    <div className="bg-white/5 px-4 py-2 rounded-full border border-white/5 text-[10px] font-bold text-slate-400 backdrop-blur-md">
+                        ACTUALIZADO HOY
                     </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 flex items-center space-x-4 shadow-sm border border-gray-100 transition-transform hover:-translate-y-1">
-                    <div className="bg-red-100 p-4 rounded-full text-red-600">
-                        <TrendingUp className="w-8 h-8" />
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white/5 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-1">Total Clientes</p>
+                        <p className="text-xl font-bold text-white">{stats.totalClientes}</p>
                     </div>
-                    <div>
-                        <p className="text-gray-500 text-sm font-medium uppercase tracking-wider">Cuentas por Cobrar</p>
-                        <p className="text-3xl font-bold text-gray-800">${stats.totalPorCobrar.toFixed(2)}</p>
+                    <div className="bg-white/5 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mb-1">Crecimiento</p>
+                        <p className="text-xl font-bold text-[#c5ff41] flex items-center">
+                            +12% <ArrowUpRight className="w-4 h-4 ml-1" />
+                        </p>
                     </div>
                 </div>
             </div>
 
-            {/* Recents Vents */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="px-6 py-5 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                    <h2 className="text-lg font-bold text-gray-800">Ventas Recientes</h2>
+            {/* Quick Actions */}
+            <div className="grid grid-cols-4 gap-4">
+                {actions.map((action, i) => (
+                    <Link key={i} to={action.link} className="flex flex-col items-center space-y-3 group">
+                        <div className={`${action.color} p-5 rounded-[24px] shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-1`}>
+                            <action.icon className="w-6 h-6" strokeWidth={2.5} />
+                        </div>
+                        <span className="text-xs font-bold text-slate-400 group-hover:text-white transition-colors">{action.label}</span>
+                    </Link>
+                ))}
+            </div>
+
+            {/* Recent Transactions Style List */}
+            <div className="space-y-4">
+                <div className="flex justify-between items-center px-2">
+                    <h3 className="text-lg font-black tracking-tight text-white">Ventas Recientes</h3>
+                    <Link to="/ventas" className="text-xs font-bold text-[#c5ff41] hover:underline flex items-center uppercase tracking-widest">
+                        Ver Todo <ChevronRight className="w-4 h-4 ml-1" />
+                    </Link>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-gray-50 text-gray-500 text-sm border-b">
-                                <th className="py-4 px-6 font-medium">Ticket #</th>
-                                <th className="py-4 px-6 font-medium">Cliente</th>
-                                <th className="py-4 px-6 font-medium">Fecha</th>
-                                <th className="py-4 px-6 font-medium text-right">Monto</th>
-                                <th className="py-4 px-6 font-medium text-center">Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {stats.ventasRecientes.map((v) => (
-                                <tr key={v.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="py-3 px-6 text-gray-800 font-medium">#{v.id}</td>
-                                    <td className="py-3 px-6 text-gray-600">{v.cliente_nombre}</td>
-                                    <td className="py-3 px-6 text-gray-500 text-sm">{new Date(v.fecha).toLocaleDateString()}</td>
-                                    <td className="py-3 px-6 text-right font-bold text-gray-800">${parseFloat(v.monto_total).toFixed(2)}</td>
-                                    <td className="py-3 px-6 text-center">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${v.estado === 'Pagado' ? 'bg-green-100 text-green-700' :
-                                                v.estado === 'Parcial' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
-                                            }`}>
-                                            {v.estado}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-                            {stats.ventasRecientes.length === 0 && (
-                                <tr><td colSpan="5" className="py-8 text-center text-gray-500">No hay ventas recientes</td></tr>
-                            )}
-                        </tbody>
-                    </table>
+
+                <div className="space-y-3">
+                    {stats.ventasRecientes.map((v) => (
+                        <div key={v.id} className="bg-[#151a2d] p-5 rounded-[24px] border border-white/5 flex items-center justify-between group hover:bg-[#1e2541] transition-all cursor-pointer">
+                            <div className="flex items-center space-x-4">
+                                <div className={`p-3 rounded-2xl ${v.estado === 'Pagado' ? 'bg-green-500/10 text-green-500' : 'bg-orange-500/10 text-orange-500'}`}>
+                                    <ShoppingBag className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold text-white group-hover:text-[#c5ff41] transition-colors">{v.cliente_nombre}</p>
+                                    <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{new Date(v.fecha).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-base font-black text-white">${parseFloat(v.monto_total).toFixed(2)}</p>
+                                <p className={`text-[9px] font-black uppercase tracking-widest ${v.estado === 'Pagado' ? 'text-green-500' : 'text-orange-500'
+                                    }`}>{v.estado}</p>
+                            </div>
+                        </div>
+                    ))}
+                    {stats.ventasRecientes.length === 0 && (
+                        <div className="bg-[#151a2d]/50 p-10 rounded-[24px] border border-dashed border-white/10 text-center">
+                            <p className="text-slate-500 text-sm font-medium">No hay transacciones recientes</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

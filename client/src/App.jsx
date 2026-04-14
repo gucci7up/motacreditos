@@ -8,31 +8,46 @@ import Pagos from './pages/Pagos';
 
 function Sidebar() {
     const location = useLocation();
-    const isActive = (path) => location.pathname === path ? "bg-indigo-700 font-bold" : "hover:bg-indigo-600";
+    const isActive = (path) => location.pathname === path;
+
+    const navItems = [
+        { path: '/', label: 'Dashboard', icon: Home },
+        { path: '/clientes', label: 'Clientes', icon: Users },
+        { path: '/ventas', label: 'Ventas', icon: ShoppingBag },
+        { path: '/pagos', label: 'Abonos', icon: CreditCard },
+    ];
 
     return (
-        <div className="w-64 bg-indigo-800 text-white flex flex-col h-screen">
-            <div className="p-6 flex items-center space-x-3 text-2xl font-bold border-b border-indigo-700">
-                <Droplet className="w-8 h-8" />
-                <span>MotaCréditos</span>
+        <div className="w-64 bg-[#0A0E21] text-white flex flex-col h-screen border-r border-white/5 shadow-2xl z-20">
+            <div className="p-8 flex items-center space-x-3 border-b border-white/5">
+                <div className="bg-[#c5ff41] p-2 rounded-xl shadow-[0_0_15px_rgba(197,255,65,0.4)]">
+                    <Droplet className="w-6 h-6 text-[#060912]" strokeWidth={3} />
+                </div>
+                <span className="text-xl font-black tracking-tighter uppercase italic">MotaCréditos</span>
             </div>
-            <nav className="flex-1 px-4 py-6 space-y-2">
-                <Link to="/" className={`flex items-center space-x-3 w-full p-3 rounded-lg transition-colors ${isActive('/')}`}>
-                    <Home className="w-5 h-5" /> <span>Dashboard</span>
-                </Link>
-                <Link to="/clientes" className={`flex items-center space-x-3 w-full p-3 rounded-lg transition-colors ${isActive('/clientes')}`}>
-                    <Users className="w-5 h-5" /> <span>Clientes</span>
-                </Link>
-                <Link to="/ventas" className={`flex items-center space-x-3 w-full p-3 rounded-lg transition-colors ${isActive('/ventas')}`}>
-                    <ShoppingBag className="w-5 h-5" /> <span>Ventas</span>
-                </Link>
-                <Link to="/pagos" className={`flex items-center space-x-3 w-full p-3 rounded-lg transition-colors ${isActive('/pagos')}`}>
-                    <CreditCard className="w-5 h-5" /> <span>Abonos</span>
-                </Link>
+
+            <nav className="flex-1 px-4 py-8 space-y-3">
+                {navItems.map((item) => (
+                    <Link
+                        key={item.path}
+                        to={item.path}
+                        className={`flex items-center space-x-4 w-full p-4 rounded-2xl transition-all duration-300 group ${isActive(item.path)
+                                ? "bg-[#c5ff41] text-[#060912] font-bold shadow-[0_0_20px_rgba(197,255,65,0.2)]"
+                                : "text-slate-400 hover:bg-white/5 hover:text-white"
+                            }`}
+                    >
+                        <item.icon className={`w-5 h-5 transition-transform duration-300 group-hover:scale-110 ${isActive(item.path) ? "text-[#060912]" : "text-slate-500 group-hover:text-[#c5ff41]"
+                            }`} />
+                        <span className="text-sm font-semibold tracking-wide">{item.label}</span>
+                    </Link>
+                ))}
             </nav>
-            <div className="p-4 text-xs text-indigo-300 text-center border-t border-indigo-700">
-                MotaCréditos © 2026<br />
-                Perfumes a Crédito
+
+            <div className="p-6">
+                <div className="bg-slate-800/40 p-4 rounded-2xl border border-white/5 text-center">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Versión 2.0</p>
+                    <p className="text-[10px] text-slate-400 font-medium">MotaCréditos © 2026</p>
+                </div>
             </div>
         </div>
     );
@@ -41,13 +56,23 @@ function Sidebar() {
 function App() {
     return (
         <Router>
-            <div className="flex bg-gray-50 min-h-screen">
+            <div className="flex bg-[#060912] min-h-screen text-white selection:bg-[#c5ff41]/30">
                 <Sidebar />
                 <main className="flex-1 flex flex-col h-screen overflow-hidden">
-                    <header className="bg-white shadow px-8 py-5 flex justify-between items-center z-10">
-                        <h1 className="text-2xl font-semibold text-gray-800 tracking-tight">Panel de Control</h1>
+                    <header className="px-10 py-8 flex justify-between items-center z-10">
+                        <div>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.3em] mb-1">Bienvenido de nuevo</p>
+                            <h1 className="text-3xl font-black text-white tracking-tight">Panel de Gestión</h1>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <button className="p-3 bg-slate-800/50 rounded-2xl border border-white/5 hover:bg-slate-700 transition-colors relative">
+                                <div className="absolute top-3 right-3 w-2 h-2 bg-[#c5ff41] rounded-full shadow-[0_0_8px_rgba(197,255,65,0.6)]"></div>
+                                <ShoppingBag className="w-5 h-5 text-slate-300" />
+                            </button>
+                            <div className="w-12 h-12 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-2xl border-2 border-white/10 shadow-lg"></div>
+                        </div>
                     </header>
-                    <div className="flex-1 overflow-auto p-8">
+                    <div className="flex-1 overflow-auto px-10 pb-10">
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/clientes" element={<Clientes />} />
