@@ -51,8 +51,12 @@ router.post('/', upload.single('imagen'), async (req, res) => {
         );
         res.status(201).json({ id: result.insertId, ...req.body, imagen_url: final_image_url });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al crear producto' });
+        console.error('Error al crear producto:', error);
+        res.status(500).json({
+            error: 'Error al crear producto',
+            details: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 });
 
