@@ -32,17 +32,33 @@ router.get('/cliente/:clienteId', async (req, res) => {
 
 // Registrar nueva venta
 router.post('/', async (req, res) => {
+    const connection = await db.getConnection();
     try {
-        const { cliente_id, monto_total } = req.body;
-        // Nota: El trigger 'after_venta_insert' automáticamente sumará esto al saldo_total del cliente.
-        const [result] = await db.query(
-            'INSERT INTO ventas (cliente_id, monto_total) VALUES (?, ?)',
-            [cliente_id, monto_total]
+        await connection.beginTransaction();
+        const { cliente_id, producto_id, cantidad, monto_total } = req.body;
+
+        // 1. Registrar la venta
+        const [result] = await connection.query(
+            'INSERT INTO ventas (cliente_id, producto_id, cantidad, monto_total) VALUES (?, ?, ?, ?)',
+            [cliente_id, producto_id, cantidad || 1, monto_total]
         );
-        res.status(201).json({ id: result.insertId, cliente_id, monto_total, estado: 'Pendiente' });
+
+        // 2. Descontar stock si hay un producto seleccionado
+        if (producto_id) {
+            await connection.query(
+                'UPDATE productos SET stock_actual = stock_actual - ? WHERE id = ?',
+                [cantidad || 1, producto_id]
+            );
+        }
+
+        await connection.commit();
+        res.status(201).json({ id: result.insertId, ...req.body, estado: 'Pendiente' });
     } catch (error) {
+        await connection.rollback();
         console.error(error);
         res.status(500).json({ error: 'Error al registrar venta' });
+    } finally {
+        connection.release();
     }
 });
 

@@ -17,17 +17,24 @@ CREATE TABLE IF NOT EXISTS clientes (
 CREATE TABLE IF NOT EXISTS productos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre_perfume VARCHAR(100) NOT NULL,
+  categoria VARCHAR(100),
+  imagen_url TEXT,
   precio_venta DECIMAL(10, 2) NOT NULL,
+  stock_actual INT DEFAULT 0,
+  stock_minimo INT DEFAULT 5,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS ventas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   cliente_id INT NOT NULL,
+  producto_id INT,
+  cantidad INT DEFAULT 1,
   fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   monto_total DECIMAL(10, 2) NOT NULL,
   estado ENUM('Pendiente', 'Parcial', 'Pagado') DEFAULT 'Pendiente',
-  FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE
+  FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
+  FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS pagos (

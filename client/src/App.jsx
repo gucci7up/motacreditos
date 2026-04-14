@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Clientes from './pages/Clientes';
 import Ventas from './pages/Ventas';
 import Pagos from './pages/Pagos';
+import Inventario from './pages/Inventario';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -35,6 +36,7 @@ function Sidebar({ activePath }) {
     const navItems = [
         { path: '/', label: 'Dashboard', icon: LayoutDashboard },
         { path: '/clientes', label: 'Clientes', icon: Users },
+        { path: '/inventario', label: 'Inventario', icon: Package },
         { path: '/ventas', label: 'Ventas', icon: ShoppingCart },
         { path: '/pagos', label: 'Abonos', icon: DollarSign },
     ];
@@ -83,6 +85,7 @@ function BottomNav({ activePath }) {
     const navItems = [
         { path: '/', label: 'Home', icon: LayoutDashboard },
         { path: '/clientes', label: 'Clientes', icon: Users },
+        { path: '/inventario', label: 'Inventario', icon: Package },
         { path: '/ventas', label: 'Ventas', icon: ShoppingCart },
         { path: '/pagos', label: 'Abonos', icon: DollarSign },
     ];
@@ -148,6 +151,7 @@ function AppLayout() {
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/clientes" element={<Clientes />} />
+                            <Route path="/inventario" element={<Inventario />} />
                             <Route path="/ventas" element={<Ventas />} />
                             <Route path="/pagos" element={<Pagos />} />
                         </Routes>

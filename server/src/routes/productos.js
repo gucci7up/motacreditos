@@ -16,15 +16,31 @@ router.get('/', async (req, res) => {
 // Registrar un nuevo producto
 router.post('/', async (req, res) => {
     try {
-        const { nombre_perfume, precio_venta } = req.body;
+        const { nombre_perfume, categoria, imagen_url, precio_venta, stock_actual, stock_minimo } = req.body;
         const [result] = await db.query(
-            'INSERT INTO productos (nombre_perfume, precio_venta) VALUES (?, ?)',
-            [nombre_perfume, precio_venta]
+            'INSERT INTO productos (nombre_perfume, categoria, imagen_url, precio_venta, stock_actual, stock_minimo) VALUES (?, ?, ?, ?, ?, ?)',
+            [nombre_perfume, categoria, imagen_url, precio_venta, stock_actual || 0, stock_minimo || 5]
         );
-        res.status(201).json({ id: result.insertId, nombre_perfume, precio_venta });
+        res.status(201).json({ id: result.insertId, ...req.body });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al crear producto' });
+    }
+});
+
+// Actualizar producto o stock
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombre_perfume, categoria, imagen_url, precio_venta, stock_actual, stock_minimo } = req.body;
+        await db.query(
+            'UPDATE productos SET nombre_perfume=?, categoria=?, imagen_url=?, precio_venta=?, stock_actual=?, stock_minimo=? WHERE id=?',
+            [nombre_perfume, categoria, imagen_url, precio_venta, stock_actual, stock_minimo, id]
+        );
+        res.json({ message: 'Producto actualizado con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al actualizar producto' });
     }
 });
 
