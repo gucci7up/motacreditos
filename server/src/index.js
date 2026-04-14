@@ -23,10 +23,17 @@ app.use('/api/ventas', require('./routes/ventas'));
 app.use('/api/pagos', require('./routes/pagos'));
 
 // Servir archivos de imagen subidos
-const UPLOADS_PATH = path.resolve(__dirname, 'uploads');
+const UPLOADS_PATH = path.resolve(__dirname, '../uploads'); // Move to server root
 const fs = require('fs');
 if (!fs.existsSync(UPLOADS_PATH)) {
-    fs.mkdirSync(UPLOADS_PATH, { recursive: true });
+    try {
+        fs.mkdirSync(UPLOADS_PATH, { recursive: true });
+        console.log(`[INIT] Carpeta de uploads creada en: ${UPLOADS_PATH}`);
+    } catch (err) {
+        console.error(`[INIT ERROR] No se pudo crear la carpeta de uploads: ${err.message}`);
+    }
+} else {
+    console.log(`[INIT] Carpeta de uploads detectada en: ${UPLOADS_PATH}`);
 }
 app.use('/uploads', express.static(UPLOADS_PATH));
 

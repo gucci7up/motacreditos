@@ -5,7 +5,7 @@ const multer = require('multer');
 const path = require('path');
 
 // Configuración de Multer
-const UPLOADS_DIR = path.resolve(__dirname, '../uploads/');
+const UPLOADS_DIR = path.resolve(__dirname, '../../uploads/'); // Move to server root
 const fs = require('fs');
 if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -21,7 +21,22 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+}).single('imagen');
+
+// Wrapper para manejar errores de multer
+const handleUpload = (req, res, next) => {
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).json({ error: 'Error de subida de archivo', details: err.message });
+        } else if (err) {
+            return res.status(500).json({ error: 'Error interno en subida', details: err.message });
+        }
+        next();
+    });
+};
 
 // Obtener todos los perfumes/productos
 router.get('/', async (req, res) => {
@@ -30,14 +45,23 @@ router.get('/', async (req, res) => {
         res.json(rows);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error al obtener productos' });
+        res.status(500).json({ error: 'Error al obtener productos', details: error.message });
     }
 });
 
 // Registrar un nuevo producto con imagen (multer)
-router.post('/', upload.single('imagen'), async (req, res) => {
+router.post('/', handleUpload, async (req, res) => {
     try {
-        const { nombre_perfume, categoria, precio_venta, stock_actual, stock_minimo } = req.body;
+        const { nombre_perfume, categoria } = req.body;
+
+        // Convert to numbers and handle empty strings
+        const precio_venta = parseFloat(req.body.precio_venta) || 0;
+        const stock_actual = parseInt(req.body.stock_actual) || 0;
+        const stock_minimo = parseInt(req.body.stock_minimo) || 5;
+
+        if (!nombre_perfume) {
+            return res.status(400).json({ error: 'El nombre del perfume es obligatorio' });
+        }
 
         // Si hay archivo, guardamos la URL relativa, si no, usamos la URL proporcionada o vacío
         let final_image_url = req.body.imagen_url || '';
@@ -47,15 +71,15 @@ router.post('/', upload.single('imagen'), async (req, res) => {
 
         const [result] = await db.query(
             'INSERT INTO productos (nombre_perfume, categoria, imagen_url, precio_venta, stock_actual, stock_minimo) VALUES (?, ?, ?, ?, ?, ?)',
-            [nombre_perfume, categoria, final_image_url, precio_venta, stock_actual || 0, stock_minimo || 5]
+            [nombre_perfume, categoria, final_image_url, precio_venta, stock_actual, stock_minimo]
         );
-        res.status(201).json({ id: result.insertId, ...req.body, imagen_url: final_image_url });
+        res.status(201).json({ id: result.insertId, nombre_perfume, categoria, imagen_url: final_image_url });
     } catch (error) {
         console.error('Error al crear producto:', error);
         res.status(500).json({
             error: 'Error al crear producto',
             details: error.message,
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            sqlMessage: error.sqlMessage // Useful for production debugging temporarily
         });
     }
 });
