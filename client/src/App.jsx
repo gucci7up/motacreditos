@@ -6,6 +6,30 @@ import Clientes from './pages/Clientes';
 import Ventas from './pages/Ventas';
 import Pagos from './pages/Pagos';
 
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+    }
+    static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+    }
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="p-10 bg-red-900/20 border border-red-500 rounded-3xl text-center">
+                    <h2 className="text-xl font-bold text-red-500 mb-2">Algo salió mal</h2>
+                    <p className="text-sm text-red-300">{this.state.error?.message}</p>
+                    <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded-xl text-xs font-bold">
+                        Recargar Aplicación
+                    </button>
+                </div>
+            );
+        }
+        return this.props.children;
+    }
+}
+
 function Sidebar() {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
@@ -32,8 +56,8 @@ function Sidebar() {
                         key={item.path}
                         to={item.path}
                         className={`flex items-center space-x-4 w-full p-4 rounded-2xl transition-all duration-300 group ${isActive(item.path)
-                                ? "bg-[#c5ff41] text-[#060912] font-bold shadow-[0_0_20px_rgba(197,255,65,0.2)]"
-                                : "text-slate-400 hover:bg-white/5 hover:text-white"
+                            ? "bg-[#c5ff41] text-[#060912] font-bold shadow-[0_0_20px_rgba(197,255,65,0.2)]"
+                            : "text-slate-400 hover:bg-white/5 hover:text-white"
                             }`}
                     >
                         <item.icon className={`w-5 h-5 transition-transform duration-300 group-hover:scale-110 ${isActive(item.path) ? "text-[#060912]" : "text-slate-500 group-hover:text-[#c5ff41]"
@@ -73,12 +97,14 @@ function App() {
                         </div>
                     </header>
                     <div className="flex-1 overflow-auto px-10 pb-10">
-                        <Routes>
-                            <Route path="/" element={<Dashboard />} />
-                            <Route path="/clientes" element={<Clientes />} />
-                            <Route path="/ventas" element={<Ventas />} />
-                            <Route path="/pagos" element={<Pagos />} />
-                        </Routes>
+                        <ErrorBoundary>
+                            <Routes>
+                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/clientes" element={<Clientes />} />
+                                <Route path="/ventas" element={<Ventas />} />
+                                <Route path="/pagos" element={<Pagos />} />
+                            </Routes>
+                        </ErrorBoundary>
                     </div>
                 </main>
             </div>
