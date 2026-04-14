@@ -51,6 +51,12 @@ router.post('/', async (req, res) => {
             );
         }
 
+        // 3. Actualizar saldo del cliente (Lógica manual ante falta de triggers)
+        await connection.query(
+            'UPDATE clientes SET saldo_total = saldo_total + ? WHERE id = ?',
+            [monto_total, cliente_id]
+        );
+
         await connection.commit();
         res.status(201).json({ id: result.insertId, ...req.body, estado: 'Pendiente' });
     } catch (error) {

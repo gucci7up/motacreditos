@@ -80,31 +80,35 @@ app.listen(PORT, async () => {
         await db.query('SELECT 1');
         logger.log(`[DB] Conexión exitosa a ${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 3306}`);
 
-        // Auto-initialize tables if they don't exist
+        // Auto-initialize tables
         const schemaPath = path.resolve(__dirname, '../../schema.sql');
         if (fs.existsSync(schemaPath)) {
             let schema = fs.readFileSync(schemaPath, 'utf8');
 
-            const cleanSchema = schema
+            const statements = schema
                 .replace(/^DELIMITER.*$/gm, '')
                 .replace(/\/\//g, ';')
-                .trim();
+                .split(';')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
 
-            if (cleanSchema) {
+            for (const statement of statements) {
                 try {
-                    await db.query(cleanSchema);
-                    logger.log('[DB] Inicialización de tablas y triggers completada con éxito.');
+                    await db.query(statement);
                 } catch (err) {
                     if (err.message.includes('already exists') || err.message.includes('Table already exists')) {
-                        logger.log('[DB] Las tablas ya existen, saltando inicialización.');
+                        // ignore
+                    } else if (err.message.includes('SUPER privilege')) {
+                        logger.log(`[DB WARNING] Trigger skipped (no SUPER privilege). Backend logic will handle it.`);
                     } else {
-                        logger.error('[DB INIT ERROR] Error al ejecutar el esquema', err);
+                        logger.error(`[DB SCHEMA ERROR] Failed statement: ${statement.substring(0, 50)}...`, err);
                     }
                 }
             }
+            logger.log('[DB] Inicialización de esquema finalizada.');
         }
     } catch (err) {
-        logger.error(`[DB ERROR] No se pudo conectar a la base de datos. Host: ${process.env.DB_HOST || 'localhost'}`, err);
+        logger.error(`[DB ERROR] No se pudo conectar a la base de datos`, err);
     }
 });
 
