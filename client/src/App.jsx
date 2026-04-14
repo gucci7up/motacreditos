@@ -33,10 +33,10 @@ class ErrorBoundary extends React.Component {
 
 function Sidebar({ activePath }) {
     const navItems = [
-        { path: '/', label: 'Dashboard', icon: Home },
+        { path: '/', label: 'Dashboard', icon: LayoutDashboard },
         { path: '/clientes', label: 'Clientes', icon: Users },
-        { path: '/ventas', label: 'Ventas', icon: ShoppingBag },
-        { path: '/pagos', label: 'Abonos', icon: CreditCard },
+        { path: '/ventas', label: 'Ventas', icon: ShoppingCart },
+        { path: '/pagos', label: 'Abonos', icon: DollarSign },
     ];
 
     return (
@@ -81,10 +81,10 @@ function Sidebar({ activePath }) {
 
 function BottomNav({ activePath }) {
     const navItems = [
-        { path: '/', label: 'Home', icon: Home },
+        { path: '/', label: 'Home', icon: LayoutDashboard },
         { path: '/clientes', label: 'Clientes', icon: Users },
-        { path: '/ventas', label: 'Ventas', icon: ShoppingBag },
-        { path: '/pagos', label: 'Abonos', icon: CreditCard },
+        { path: '/ventas', label: 'Ventas', icon: ShoppingCart },
+        { path: '/pagos', label: 'Abonos', icon: DollarSign },
     ];
 
     return (
@@ -95,7 +95,7 @@ function BottomNav({ activePath }) {
                         key={item.path}
                         to={item.path}
                         className={`flex flex-col items-center justify-center py-3 px-5 rounded-[24px] transition-all duration-300 ${activePath === item.path
-                            ? "bg-indigo-600 text-white scale-105 shadow-lg shadow-indigo-200"
+                            ? "bg-rose-600 text-white scale-105 shadow-lg shadow-rose-200"
                             : "text-slate-400"
                             }`}
                     >
