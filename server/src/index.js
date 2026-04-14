@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const logger = require('./utils/logger');
-logger.log(`VERSION: 2.1.1-AUTO-MIGRATE`);
+logger.log(`VERSION: 2.1.2-FULL-MIGRATE`);
 require('dotenv').config();
 
 const app = express();
@@ -122,14 +122,22 @@ app.listen(PORT, async () => {
 
             // Migrations / Schema patching (Fix for existing tables missing new columns)
             try {
-                const [columns] = await db.query('SHOW COLUMNS FROM productos');
-                const hasCategoria = columns.some(c => c.Field === 'categoria');
-                if (!hasCategoria) {
-                    await db.query('ALTER TABLE productos ADD COLUMN categoria VARCHAR(100) AFTER nombre_perfume');
-                    logger.log('[DB MIGRATION] Columna "categoria" añadida a la tabla productos.');
-                }
+                const ensureColumn = async (table, column, definition) => {
+                    const [cols] = await db.query(`SHOW COLUMNS FROM ${table}`);
+                    if (!cols.some(c => c.Field === column)) {
+                        await db.query(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+                        logger.log(`[DB MIGRATION] Columna "${column}" añadida a la tabla ${table}.`);
+                    }
+                };
+
+                // Productos
+                await ensureColumn('productos', 'categoria', 'VARCHAR(100) AFTER nombre_perfume');
+                await ensureColumn('productos', 'imagen_url', 'TEXT AFTER categoria');
+                await ensureColumn('productos', 'stock_actual', 'INT DEFAULT 0 AFTER precio_venta');
+                await ensureColumn('productos', 'stock_minimo', 'INT DEFAULT 5 AFTER stock_actual');
+
             } catch (migErr) {
-                logger.error('[DB MIGRATION ERROR] No se pudo verificar/añadir la columna categoria', migErr);
+                logger.error('[DB MIGRATION ERROR] Error en la migración automática', migErr);
             }
         }
     } catch (err) {
