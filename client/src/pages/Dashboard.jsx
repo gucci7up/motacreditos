@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
-import { Users, TrendingUp, DollarSign, Plus, ArrowUpRight, ArrowDownLeft, FileText, ChevronRight } from 'lucide-react';
+import { Users, TrendingUp, DollarSign, Plus, ArrowUpRight, ArrowDownLeft, FileText, ChevronRight, ShoppingBag } from 'lucide-react';
 
 export default function Dashboard() {
     const [stats, setStats] = useState({ totalClientes: 0, totalPorCobrar: 0, ventasRecientes: [] });
