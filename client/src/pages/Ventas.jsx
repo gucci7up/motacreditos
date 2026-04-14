@@ -36,76 +36,118 @@ export default function Ventas() {
     };
 
     return (
-        <div className="space-y-6 max-w-7xl mx-auto">
-            <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h2 className="text-xl font-bold text-gray-800">Registro de Ventas</h2>
+        <div className="space-y-6 max-w-5xl">
+            <div className="flex justify-between items-center bg-[#1e2541] p-6 rounded-2xl md:rounded-[32px] border border-white/5 shadow-xl">
+                <div>
+                    <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Ventas</h2>
+                    <p className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Historial de Transacciones</p>
+                </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium shadow flex items-center space-x-2 transition"
+                    className="bg-[#c5ff41] hover:bg-[#b0e63a] text-black w-12 h-12 md:w-auto md:px-6 md:py-3 rounded-xl md:rounded-2xl font-black shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-95"
                 >
-                    <ShoppingCart className="w-5 h-5" /> <span>Nueva Venta</span>
+                    <ShoppingCart className="w-5 h-5" /> <span className="hidden md:inline">Nueva Venta</span>
                 </button>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            {/* Desktop Table */}
+            <div className="hidden md:block bg-[#1e2541]/50 rounded-[32px] border border-white/5 overflow-hidden">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-gray-50 text-gray-500 text-sm border-b">
-                            <th className="py-4 px-6 font-medium">No. Ticket</th>
-                            <th className="py-4 px-6 font-medium">Cliente</th>
-                            <th className="py-4 px-6 font-medium">Fecha</th>
-                            <th className="py-4 px-6 font-medium">Monto</th>
-                            <th className="py-4 px-6 font-medium text-center">Estado</th>
-                            <th className="py-4 px-6 font-medium text-center">Acciones</th>
+                        <tr className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-white/5">
+                            <th className="py-6 px-8">No. Ticket</th>
+                            <th className="py-6 px-8">Cliente</th>
+                            <th className="py-6 px-8">Fecha</th>
+                            <th className="py-6 px-8">Monto</th>
+                            <th className="py-6 px-8 text-center">Estado</th>
+                            <th className="py-6 px-8 text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-white/5">
                         {ventas.map(v => (
-                            <tr key={v.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="py-4 px-6 text-gray-900 font-bold">#{v.id}</td>
-                                <td className="py-4 px-6 text-gray-600">{v.cliente_nombre}</td>
-                                <td className="py-4 px-6 text-gray-500 text-sm">{new Date(v.fecha).toLocaleDateString()}</td>
-                                <td className="py-4 px-6 font-bold text-gray-800">${parseFloat(v.monto_total).toFixed(2)}</td>
-                                <td className="py-4 px-6 text-center">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${v.estado === 'Pagado' ? 'bg-green-100 text-green-700' :
-                                            v.estado === 'Parcial' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                            <tr key={v.id} className="hover:bg-white/[0.02] transition-colors group">
+                                <td className="py-5 px-8 text-[#c5ff41] font-black">#{v.id}</td>
+                                <td className="py-5 px-8 text-white font-bold">{v.cliente_nombre}</td>
+                                <td className="py-5 px-8 text-slate-400 text-sm">{new Date(v.fecha).toLocaleDateString()}</td>
+                                <td className="py-5 px-8 font-black text-white">${parseFloat(v.monto_total).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                <td className="py-5 px-8 text-center">
+                                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${v.estado === 'Pagado' ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
+                                            v.estado === 'Parcial' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' :
+                                                'bg-red-500/10 text-red-500 border border-red-500/20'
                                         }`}>
                                         {v.estado}
                                     </span>
                                 </td>
-                                <td className="py-4 px-6 text-center">
-                                    <button onClick={() => handlePrint(v.id)} className="text-gray-500 hover:text-indigo-600 transition" title="Imprimir Recibo">
-                                        <Printer className="w-5 h-5 mx-auto" />
+                                <td className="py-5 px-8 text-right">
+                                    <button onClick={() => handlePrint(v.id)} className="text-slate-400 hover:text-[#c5ff41] transition p-2 hover:bg-white/5 rounded-xl">
+                                        <Printer className="w-5 h-5" />
                                     </button>
                                 </td>
                             </tr>
                         ))}
-                        {ventas.length === 0 && (
-                            <tr><td colSpan="6" className="py-8 text-center text-gray-500">No se encontraron ventas</td></tr>
-                        )}
                     </tbody>
                 </table>
             </div>
 
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative">
-                        <h3 className="text-xl font-bold text-gray-800 mb-6">Registrar Venta</h3>
-                        <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-3">
+                {ventas.map(v => (
+                    <div key={v.id} className="bg-[#151a2d] p-5 rounded-2xl border border-white/5 space-y-4">
+                        <div className="flex justify-between items-start">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
-                                <select required value={formData.cliente_id} onChange={e => setFormData({ ...formData, cliente_id: e.target.value })} className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option value="">Seleccione un cliente...</option>
-                                    {clientes.map(c => <option key={c.id} value={c.id}>{c.nombre} (Deuda: ${c.saldo_total})</option>)}
+                                <div className="flex items-center space-x-2 mb-1">
+                                    <span className="text-[#c5ff41] font-black text-sm">#{v.id}</span>
+                                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-tighter shadow-sm ${v.estado === 'Pagado' ? 'bg-green-500 text-black' :
+                                            v.estado === 'Parcial' ? 'bg-orange-500 text-black' :
+                                                'bg-red-500 text-black'
+                                        }`}>
+                                        {v.estado}
+                                    </span>
+                                </div>
+                                <p className="text-sm font-bold text-white">{v.cliente_nombre}</p>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase mt-0.5">{new Date(v.fecha).toLocaleDateString()}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Monto</p>
+                                <p className="text-lg font-black text-white">${parseFloat(v.monto_total).toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-between items-center pt-3 border-t border-white/5">
+                            <button onClick={() => handlePrint(v.id)} className="flex items-center space-x-2 text-[10px] font-black uppercase text-[#c5ff41] tracking-widest">
+                                <Printer className="w-4 h-4" /> <span>Imprimir Recibo</span>
+                            </button>
+                        </div>
+                    </div>
+                ))}
+                {ventas.length === 0 && (
+                    <div className="bg-[#151a2d]/50 p-10 rounded-2xl border border-dashed border-white/10 text-center">
+                        <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">No hay ventas registradas</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-[#0a0f1d]/90 z-[60] flex justify-center items-center p-4 backdrop-blur-md">
+                    <div className="bg-[#1e2541] rounded-[32px] p-8 w-full max-w-md border border-white/10 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                        <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+                            <ShoppingCart className="w-6 h-6 mr-2 text-[#c5ff41]" /> Registrar Venta
+                        </h3>
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div>
+                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Cliente</label>
+                                <select required value={formData.cliente_id} onChange={e => setFormData({ ...formData, cliente_id: e.target.value })} className="w-full px-5 py-3.5 bg-white/5 border border-white/5 rounded-2xl text-white appearance-none focus:outline-none focus:border-[#c5ff41]/50 focus:ring-1 focus:ring-[#c5ff41]/20 transition-all font-medium">
+                                    <option value="" className="bg-[#1e2541]">Seleccione un cliente...</option>
+                                    {clientes.map(c => <option key={c.id} value={c.id} className="bg-[#1e2541]">{c.nombre} (Deuda: ${c.saldo_total})</option>)}
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Monto Total ($)</label>
-                                <input required type="number" step="0.01" min="0.01" value={formData.monto_total} onChange={e => setFormData({ ...formData, monto_total: e.target.value })} className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Monto Total ($)</label>
+                                <input required type="number" step="0.01" min="0.01" value={formData.monto_total} onChange={e => setFormData({ ...formData, monto_total: e.target.value })} className="w-full px-5 py-3.5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c5ff41]/50 focus:ring-1 focus:ring-[#c5ff41]/20 transition-all font-medium" placeholder="0.00" />
                             </div>
-                            <div className="flex justify-end space-x-3 pt-4">
-                                <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition">Cancelar</button>
-                                <button type="submit" className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-md transition">Guardar</button>
+                            <div className="flex space-x-3 pt-4">
+                                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-6 py-4 text-slate-400 font-bold hover:bg-white/5 rounded-2xl transition">Cancelar</button>
+                                <button type="submit" className="flex-[2] px-6 py-4 bg-[#c5ff41] hover:bg-[#b0e63a] text-black font-black rounded-2xl shadow-xl shadow-[#c5ff41]/10 transition active:scale-95">Guardar Venta</button>
                             </div>
                         </form>
                     </div>
