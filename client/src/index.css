@@ -4,44 +4,43 @@
 
 @layer base {
     :root {
-        --bg-main: #060912;
-        --bg-card: #151a2d;
-        --bg-card-hover: #1e2541;
-        --accent-neon: #c5ff41;
-        --accent-purple: #7c3aed;
-        --text-primary: #ffffff;
-        --text-secondary: #94a3b8;
-        --glass-bg: rgba(21, 26, 45, 0.7);
-        --glass-border: rgba(255, 255, 255, 0.1);
+        --bg-main: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-card-hover: #f1f5f9;
+        --accent-primary: #6366f1;
+        --accent-secondary: #8b5cf6;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --glass-bg: rgba(255, 255, 255, 0.8);
+        --glass-border: rgba(99, 102, 241, 0.1);
     }
 
     body {
-        @apply bg-[#060912] text-white font-sans antialiased;
+        @apply bg-[#f8fafc] text-[#0f172a] font-sans antialiased;
     }
 }
 
 .glass {
-    @apply bg-opacity-70 backdrop-blur-lg border border-white/10;
+    @apply bg-opacity-80 backdrop-blur-lg border border-indigo-50/20;
 }
 
-.neon-glow {
-    box-shadow: 0 0 15px rgba(197, 255, 65, 0.3);
+.premium-shadow {
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
 }
 
-.neon-text {
-    @apply text-[#c5ff41];
-    text-shadow: 0 0 10px rgba(197, 255, 65, 0.5);
+.accent-text {
+    @apply text-[#6366f1];
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-[#060912];
+    @apply bg-slate-100;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-slate-800 rounded-full hover:bg-slate-700;
+    @apply bg-slate-300 rounded-full hover:bg-slate-400;
 }
